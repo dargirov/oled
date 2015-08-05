@@ -12,10 +12,12 @@ static void begin_transmission(uint8_t address)
 	transmission_buffer_index = 1;
 }
 
+
 static void write(uint8_t data)
 {
 	transmission_buffer[transmission_buffer_index++] = data;
 }
+
 
 static void end_transmission()
 {
@@ -34,6 +36,7 @@ static void end_transmission()
 	transmission_buffer_index = 0;
 }
 
+
 static void LCD_send_data(uint8_t data)
 {
 	begin_transmission(LCD_ADDRESS);
@@ -42,6 +45,7 @@ static void LCD_send_data(uint8_t data)
 	end_transmission();
 }
 
+
 static void LCD_send_command(uint8_t command)
 {
 	begin_transmission(LCD_ADDRESS);
@@ -49,6 +53,7 @@ static void LCD_send_command(uint8_t command)
 	write(command);
 	end_transmission();
 }
+
 
 static void LCD_send_command_data(uint8_t command, uint8_t data)
 {
@@ -59,6 +64,7 @@ static void LCD_send_command_data(uint8_t command, uint8_t data)
 	write(data);
 	end_transmission();
 }
+
 
 static void I2C1_init()
 {
@@ -117,6 +123,7 @@ void LCD_init()
 	LCD_send_command(0xaf);
 }
 
+
 void LCD_send_text(uint8_t *data)
 {
 	uint16_t count = 0, buffer_char_space = BUFFER_SIZE / 6;
@@ -146,7 +153,7 @@ void LCD_send_text(uint8_t *data)
 	end_transmission();	
 }
 
-// todo - make start adres in pixels
+
 void LCD_set_page_address(uint8_t start)  
 {
 	//  Page start Address, range : 0-7d
@@ -155,7 +162,7 @@ void LCD_set_page_address(uint8_t start)
 	LCD_send_command(7);
 }
 
-// todo - make start adres in pixels
+
 void LCD_set_column_address(uint8_t start) 
 {
 	// Column start address, range : 0-127d
@@ -163,6 +170,7 @@ void LCD_set_column_address(uint8_t start)
 	LCD_send_command(start);
 	LCD_send_command(127);
 }
+
 
 void LCD_clear_screen()
 {
@@ -179,9 +187,4 @@ void LCD_clear_screen()
 		
 		end_transmission();
 	}
-}
-
-void LCD_draw_line(uint8_t start_x, uint8_t start_y, uint8_t end_x, uint8_t end_y)
-{
-	// todo
 }
