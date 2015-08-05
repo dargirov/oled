@@ -1,4 +1,5 @@
 #include "lcd.h"
+#include <math.h>
 
 static uint8_t transmission_buffer[BUFFER_SIZE], transmission_buffer_index = 0;
 
@@ -187,4 +188,67 @@ void LCD_clear_screen()
 		
 		end_transmission();
 	}
+}
+
+void LCD_draw_pixel(uint8_t x, uint8_t y)
+{
+	LCD_set_column_address(x);
+	LCD_set_page_address(y >> 3);
+	LCD_send_data(pixel[y % 8]);
+}
+
+void LCD_draw_line(uint8_t start_x, uint8_t start_y, uint8_t end_x, uint8_t end_y)
+{
+	uint8_t step_y = (uint8_t) ceil((abs(end_x - start_x) + 1) / (abs(end_y - start_y) + 1) + 0.1);
+	uint8_t x = start_x, y = start_y;
+	uint16_t count = 1;
+	
+	LCD_draw_pixel(x, y);
+
+	do
+	{
+        	if (x >= end_x && y >= end_y)
+                {
+                	break;
+                }
+
+                if (count % step_y == 0)
+                {
+			if (start_y < end_y)
+			{
+				y++;
+			}
+			else
+			{
+				y--;
+			}
+
+			if (step_y == 1)
+			{
+				if (start_x < end_x)
+				{
+					x++;
+				}
+				else if (start_x > end_x)
+				{
+					x--;
+				}
+			}
+		}
+                else
+                {
+			if (start_x < end_x)
+			{
+				x++;
+			}
+			else
+			{
+				x--;
+			}
+		}
+
+                LCD_draw_pixel(x, y);
+                count++;
+            }
+            while (1);
 }

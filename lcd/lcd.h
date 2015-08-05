@@ -123,6 +123,8 @@ void LCD_send_text(uint8_t *);
 void LCD_set_page_address(uint8_t);
 void LCD_set_column_address(uint8_t);
 void LCD_clear_screen();
+void LCD_draw_pixel(uint8_t, uint8_t);
+void LCD_draw_line(uint8_t, uint8_t, uint8_t, uint8_t);
 
 
 #endif
